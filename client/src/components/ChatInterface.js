@@ -1,15 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import './ChatInterface.css';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([
     {
-      text: "👋 Hi! I'm CryptoBuddy, your AI-powered financial sidekick! Ask me about trending, sustainable, or profitable cryptocurrencies!",
+      text: "👋 Hi! I'm CryptoBuddy, your AI-powered financial sidekick! Ask me about market trends, historical data, or global statistics!",
       sender: 'bot'
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [chartData, setChartData] = useState(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -18,7 +22,14 @@ const ChatInterface = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, chartData]);
+
+  const formatChartData = (prices) => {
+    return prices.map(([timestamp, price]) => ({
+      date: new Date(timestamp).toLocaleDateString(),
+      price: price
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,9 +40,10 @@ const ChatInterface = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    setChartData(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/chat', {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,6 +55,11 @@ const ChatInterface = () => {
       
       // Add bot response
       setMessages(prev => [...prev, { text: data.response, sender: 'bot' }]);
+
+      // If the response includes historical data, fetch and display the chart
+      if (data.historicalData) {
+        setChartData(formatChartData(data.historicalData.prices));
+      }
     } catch (error) {
       setMessages(prev => [...prev, { 
         text: "Sorry, I'm having trouble connecting to the server. Please try again later!", 
@@ -76,6 +93,19 @@ const ChatInterface = () => {
               <span></span>
               <span></span>
             </div>
+          </div>
+        )}
+        {chartData && (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="price" stroke="#8884d8" />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         )}
         <div ref={messagesEndRef} />
