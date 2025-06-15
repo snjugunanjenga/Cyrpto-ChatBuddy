@@ -91,3 +91,7 @@ vercel
 ## License
 
 MIT License 
+
+### Contributors:
+
+**Lead Architect** : Cpt. Njenga
