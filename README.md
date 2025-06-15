@@ -5,6 +5,14 @@ CryptoBuddy is a rule-based chatbot that provides cryptocurrency investment advi
 ## Live Demo
 Check out the live application: [CryptoBuddy](https://cryptobuddy-frontend.onrender.com/)
 
+## Screenshots
+
+### Homepage
+![Homepage](screenshots/Homepage.PNG)
+
+### Start Page
+![Start Page](screenshots/Start%20page.PNG)
+
 ## Features
 
 - Clean, modern chat interface
@@ -18,6 +26,8 @@ Check out the live application: [CryptoBuddy](https://cryptobuddy-frontend.onren
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
+- MongoDB Atlas account
+- Render.com account
 
 ## Installation
 
@@ -32,7 +42,7 @@ cd cryptobuddy
 npm run install-all
 ```
 
-## Running the Application
+## Running the Application Locally
 
 1. Start the development server:
 ```bash
@@ -46,6 +56,36 @@ This will start both the backend server (on port 5000) and the frontend developm
 http://localhost:3000
 ```
 
+## Deployment on Render.com
+
+### Backend Deployment
+
+1. Create a new Web Service on Render.com
+2. Connect your GitHub repository
+3. Configure the service:
+   - Name: `cryptobuddy-backend`
+   - Environment: `Node`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+4. Add Environment Variables:
+   - `PORT`: 5000
+   - `MONGODB_URI`: Your MongoDB connection string
+   - `NODE_ENV`: production
+5. Click "Create Web Service"
+
+### Frontend Deployment
+
+1. Create another Web Service on Render.com
+2. Connect the same GitHub repository
+3. Configure the service:
+   - Name: `cryptobuddy-frontend`
+   - Environment: `Node`
+   - Build Command: `cd client && npm install && npm run build`
+   - Start Command: `cd client && npm run start:prod`
+4. Add Environment Variables:
+   - `REACT_APP_API_URL`: Your backend Render URL
+5. Click "Create Web Service"
+
 ## Usage
 
 1. Type your questions about cryptocurrencies in the chat input
@@ -54,32 +94,6 @@ http://localhost:3000
    - Sustainable cryptocurrencies
    - Profitable cryptocurrencies
 3. Get instant responses with cryptocurrency recommendations
-
-## Deployment
-
-### Backend Deployment (Heroku)
-
-1. Create a new Heroku app
-2. Set up the following environment variables:
-   - `PORT`: (Heroku will set this automatically)
-3. Deploy using Heroku CLI:
-```bash
-heroku create
-git push heroku main
-```
-
-### Frontend Deployment (Vercel)
-
-1. Install Vercel CLI:
-```bash
-npm i -g vercel
-```
-
-2. Deploy to Vercel:
-```bash
-cd client
-vercel
-```
 
 ## Security
 
