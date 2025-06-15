@@ -2,6 +2,9 @@
 
 CryptoBuddy is a rule-based chatbot that provides cryptocurrency investment advice based on predefined data. It offers insights about trending, sustainable, and profitable cryptocurrencies.
 
+## Live Demo
+Check out the live application: [CryptoBuddy](https://cryptobuddy-frontend.onrender.com/)
+
 ## Features
 
 - Clean, modern chat interface
